@@ -45,10 +45,7 @@ class AStarMethod(BaseMethod):
         way = []
         current = goal_point
         if goal_point not in came_from.keys():
-            if self.debug:
-                return ([start_point], mem_info)
-            else:
-                return [start_point]
+            return super()._method(current_map, start_point)
 
         while current is not None:
             way.insert(0, current)

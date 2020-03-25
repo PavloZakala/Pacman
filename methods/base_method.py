@@ -45,10 +45,12 @@ class BaseMethod(object):
 
         # (uy, ux) = self._get_user_position(current_map)
         (uy, ux) = user_position
-
-        for row in current_map:
+        fear_points = []
+        for y, row in enumerate(current_map):
             new_row = []
-            for c in row:
+            for x, c in enumerate(row):
+                if c in self.fear_list:
+                    fear_points.append((y, x))
                 if c in self.goal_list:
                     new_row.append(self.GOAL[0])
                 elif c in self.ignore_list:
@@ -57,14 +59,28 @@ class BaseMethod(object):
                     new_row.append(self.WALL[0])
             new_map.append(new_row)
 
-        for y, row in enumerate(current_map):
-            new_row = []
-            for x, c in enumerate(row):
-                if c in self.fear_list:
-                    new_map[y+1][x] = self.WALL[0]
-                    new_map[y-1][x] = self.WALL[0]
-                    new_map[y][x+1] = self.WALL[0]
-                    new_map[y][x-1] = self.WALL[0]
+        h = len(new_map)
+        w = len(new_map[0])
+
+        for (y, x) in fear_points:
+        # for y, row in enumerate(current_map):
+        #     new_row = []
+        #     for x, c in enumerate(row):
+        #         if c in self.fear_list:
+            new_map[y+1][x] = self.WALL[0]
+            new_map[y-1][x] = self.WALL[0]
+            new_map[y][x+1] = self.WALL[0]
+            new_map[y][x-1] = self.WALL[0]
+
+            # new_map[y+1][x+1] = self.WALL[0]
+            # new_map[y-1][x-1] = self.WALL[0]
+            # new_map[y-1][x+1] = self.WALL[0]
+            # new_map[y+1][x-1] = self.WALL[0]
+        
+            # new_map[min(y+1, h-1)][x] = self.WALL[0]
+            # new_map[max(y-1, 0)][x] = self.WALL[0]
+            # new_map[y][min(x+1, w-1)] = self.WALL[0]
+            # new_map[y][max(x-1, 0)] = self.WALL[0]
 
         new_map[uy][ux] = self.SPACE[0]
         return new_map
@@ -86,6 +102,6 @@ class BaseMethod(object):
 
     def get_way(self, current_map, start, fear_positions=[], goal=[], direct=""):
 
-        current_map = self._map_simplify(current_map, start)
+        new_man = self._map_simplify(current_map, start)
         
-        return self._method(current_map, start)
+        return self._method(new_man, start)

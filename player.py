@@ -31,7 +31,7 @@ class Player(pygame.sprite.Sprite):
         self.algorithm = algorithm(str(self.num), 
                                     [goal_char],
                                     fear_list=fear_list,
-                                    ignore_list=ignore_list + [' '], 
+                                    ignore_list=ignore_list, 
                                     deep_level=deep_level,
                                     check_fear=check_fear)
 

@@ -51,7 +51,10 @@ class Pacman(BaseGame):
         self.find_goal = 0
 
         for i in range(goal_size):
-            (y, x) = self.set_position(self.board, drop=True)
+            p = self.set_position(self.board, drop=True)
+            if p is None:
+                continue
+            (y, x) = p
             self.goal[(y, x)] = True
             self.board[y][x] = self.GOAL
 
@@ -68,8 +71,11 @@ class Pacman(BaseGame):
             y = random.randint(0, self.height-1)
             x = random.randint(0, self.width-1)
             i += 1
-            if board[y][x] == ' 'or (i > 500) and drop:
+            if board[y][x] == ' ':                
                 return (y, x)
+            if (i > 500) and drop:
+                return None
+                
 
 
     def getBoardSize(self):
@@ -92,7 +98,7 @@ class Pacman(BaseGame):
         self.players[p] = (ny, nx)
 
         for (y, x) in self.goal.keys():
-            if self.goal[(y, x)]:
+            if self.goal[(y, x)] and self.board[y][x] == ' ':
                 self.board[y][x] = 'g'
 
         return self.board, (p + 1) % len(self.players)

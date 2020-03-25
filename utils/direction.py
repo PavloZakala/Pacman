@@ -29,10 +29,10 @@ class Direction:
     ACTION_KEYS = [k for k in ACTION.keys()]
 
     ACTION_DIR_KEYS = {
-        "right": [RIGHT, DOWN, LEFT, UP],
-        "down": [DOWN, RIGHT, UP, LEFT],        
-        "left": [LEFT, UP, RIGHT, DOWN],
-        "up": [UP, LEFT, DOWN, RIGHT]
+        "right": [UP, RIGHT, DOWN, LEFT],
+        "down": [LEFT, DOWN, RIGHT, UP],        
+        "left": [DOWN, LEFT, UP, RIGHT],
+        "up": [RIGHT, UP, LEFT, DOWN]
     }
 
     FULLACTION = {

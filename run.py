@@ -1,22 +1,14 @@
 from datetime import datetime
 
 import numpy as np
+import random
 import pygame
 
 from icon_process import Icon
 from pacman_game import Pacman
 from player import Player
 
-from methods.a_star_method import AStarMethod
-from methods.base_method import BaseMethod
-from methods.bfs_method import BfsMethod
-from methods.dfs_method import DfsMethod
-from methods.greedy_method import GreedyMethod
-from methods.minimax_method import MiniMaxMethod
-
-from maps.base_map import BaseMap
-from maps.free_map import FreeMap
-from maps.maze_map import MazeMap
+from game_config import GAME_LEVELS
 
 BLACK = (0,0,0)
 WHITE = (255,255,255)
@@ -191,7 +183,17 @@ class VisualGame(object):
                         done = True
 
             if not end:  # Is end game
+                print("------------------------------------")
                 # Pacman step
+                self.players[0].step()
+                self.players[0].image_update()            
+
+                pos = (self.players[0].y, self.players[0].x)
+                if pos in self.pacman_game.goal.keys() and self.goal[pos].vis:
+                    self.goal[pos].update()                    
+                
+                res = self.pacman_game.getGameEnded(0)
+
                 for p in self.players[1:]:
                     p.step()
                     p.image_update()
@@ -205,16 +207,7 @@ class VisualGame(object):
                     (w, h) = text.get_size()
                     self.screen.blit(text, [self.center[0] - w//2, self.center[1] - h//2])
                     end = True
-                    continue
-                
-                self.players[0].step()
-                self.players[0].image_update()            
-
-                pos = (self.players[0].y, self.players[0].x)
-                if pos in self.pacman_game.goal.keys() and self.goal[pos].vis:
-                    self.goal[pos].update()                    
-                
-                res = self.pacman_game.getGameEnded(0)    
+                    continue 
 
                 self.screen.fill(BLACK)
 
@@ -248,70 +241,17 @@ class VisualGame(object):
             pygame.display.flip()
             self.clock.tick(1 / speed)
 
-GAME_LEVELS = {
-    0:{
-        "W": 30, 
-        "H": 30, 
-        "maze": MazeMap,
-        "points_size": 300,
-        "pacman_deep": 10,
-        "gho_deep": 1,
-        "players": {
-            0: MiniMaxMethod,            
-        }               
-    },
-    1:{
-        "W": 18, 
-        "H": 20, 
-        "maze": MazeMap,
-        "points_size": 100,
-        "pacman_deep": 4,
-        "gho_deep": 2,
-        "players": {
-            0: MiniMaxMethod,
-            1: MiniMaxMethod,
-        }               
-    },
-    2:{
-        "W": 18, 
-        "H": 20, 
-        "maze": MazeMap,
-        "points_size": 100,
-        "pacman_deep": 6,
-        "gho_deep": 2,
-        "players": {
-            0: MiniMaxMethod,
-            1: MiniMaxMethod,
-            # 2: MiniMaxMethod,
-        }               
-    },
-    3:{
-        "W": 10, 
-        "H": 20, 
-        "maze": MazeMap,
-        "points_size": 100,
-        "pacman_deep": 5,
-        "gho_deep": 2,
-        "players": {
-            0: MiniMaxMethod,
-            1: MiniMaxMethod,
-            2: MiniMaxMethod,
-        }               
-    }
-
-}
-
 if __name__ == "__main__":
 
     import argparse
 
     parser = argparse.ArgumentParser(description='Process some integers.')
-    parser.add_argument('--level', default=1, metavar='N', type=int,
-                        help='choose the level [0..4]')
+    parser.add_argument('--level', default='bfs', metavar='N', type=str,
+                        help="choose the level {}".format(list(GAME_LEVELS.keys())))
 
     args = parser.parse_args()
     if args.level in GAME_LEVELS.keys():
         game = VisualGame(GAME_LEVELS[args.level])
         game.play(0.1)
     else:
-        print("Level not found!! You can use".format(GAME_LEVELS.keys()))
+        print("Level not found!! You can use {}".format(list(GAME_LEVELS.keys())))
