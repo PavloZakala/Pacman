@@ -37,7 +37,7 @@ class GreedyMethod(BaseMethod):
             
         while True:
 
-            neighbors = self._sort_neighbors(current_map, current, goal_point)
+            neighbors = self._sort_neighbors(num_map, current, goal_point)
             num_map[current[0]][current[1]] = 'X'                
 
             if len(neighbors) == 1:
@@ -115,7 +115,7 @@ if __name__ == "__main__":
     for i, MAP in enumerate([MAP1, MAP2, MAP3]):
         print("Map: {}".format(i+1))
         start_time = datetime.now()
-        (WAY1, mem_info) = greedy.get_way(MAP)
+        (WAY1, mem_info) = greedy.get_way(MAP, (1, 1))
         print("Time: {}".format((datetime.now() - start_time).total_seconds()))
         print("Step_size: {}".format(mem_info["step_size"]))
         print("Memory use:\n")

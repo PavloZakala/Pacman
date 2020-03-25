@@ -80,11 +80,11 @@ class BaseMethod(object):
     def __init__(self, *args, **kwargs):        
         self.user_idx = args[0]
         self.goal_list = args[1]
-        self.fear_list = kwargs.get("fear_list")
-        self.ignore_list = kwargs.get("ignore_list")
-        self.debug = kwargs.get("debug")
+        self.fear_list = kwargs.get("fear_list", [])
+        self.ignore_list = kwargs.get("ignore_list", []) + [self.SPACE]
+        self.debug = kwargs.get("debug", False)
 
-    def get_way(self, current_map, start, fear_positions, goal, direct):
+    def get_way(self, current_map, start, fear_positions=[], goal=[], direct=""):
 
         current_map = self._map_simplify(current_map, start)
         

@@ -106,7 +106,7 @@ if __name__ == "__main__":
     for i, MAP in enumerate([MAP1, MAP2, MAP3]):
         print("Map: {}".format(i+1))
         start_time = datetime.now()
-        (WAY1, mem_info) = bfs.get_way(MAP)
+        (WAY1, mem_info) = bfs.get_way(MAP, (1, 1))
         print("Time: {}".format((datetime.now() - start_time).total_seconds()))
         print("Step_size: {}".format(mem_info["step_size"]))
         print("Memory use:\n")
